@@ -12,24 +12,26 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (true) {
                 Socket clientSocket = serverSocket.accept(); // ждем подключения
+                try(
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
 
-                System.out.printf("Принято новое соединенение. Порт: %d%n", clientSocket.getPort());
+                    System.out.printf("Принято новое соединенение. Порт: %d%n", clientSocket.getPort());
 
-                out.println("Привет, как тебя зовут?");
-                String name = in.readLine();
-                String child = "1";
-                String plus = "";
-                while (!(child.equals("да") || child.equals("нет"))) {
-                    out.println(plus + name +", тебе есть 10 лет? (да/нет)");
-                    child = in.readLine();
-                    if (child.equals("нет")) {
-                        out.println("Добро пожаловать в детскую зону!");
-                    } else if (child.equals("да")) {
-                        out.println("Добро пожаловать в зону для взрослых!");
-                    } else {
-                        plus= "Я так и не понял, сколько же тебе лет. ";
+                    out.println("Привет, как тебя зовут?");
+                    String name = in.readLine();
+                    String child = "1";
+                    String plus = "";
+                    while (!(child.equals("да") || child.equals("нет"))) {
+                        out.println(plus + name + ", тебе есть 10 лет? (да/нет)");
+                        child = in.readLine();
+                        if (child.equals("нет")) {
+                            out.println("Добро пожаловать в детскую зону!");
+                        } else if (child.equals("да")) {
+                            out.println("Добро пожаловать в зону для взрослых!");
+                        } else {
+                            plus = "Я так и не понял, сколько же тебе лет. ";
+                        }
                     }
                 }
             }
